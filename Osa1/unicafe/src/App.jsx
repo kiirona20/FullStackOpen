@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
-const DisplayStatistics = ({good,neutral,bad,total,average,positive}) => {
-  if (total === 0) {
+const Statistics = (props) => {
+  if (props.total === 0) {
     return (
       <div>
         <p>No feedback given</p>
@@ -10,19 +10,37 @@ const DisplayStatistics = ({good,neutral,bad,total,average,positive}) => {
   }
   return (
     <div>
-      <h1>statistics</h1>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>all {total}</p>
-      <p>Average {average}</p>
-      <p>Positive {positive}%</p>
+      <Headers text="statistics"/>
+      <StatisticLine text="good" value ={props.good} />
+      <StatisticLine text="neutral" value ={props.neutral} />
+      <StatisticLine text="bad" value ={props.bad} />
+      <StatisticLine text="all" value ={props.total} />
+      <StatisticLine text="average" value ={props.average} />
+      <StatisticLine text="positive" value ={props.positive} />
     </div>
   )
 }
 
+const Headers = ({text}) => {
+  return(<h1>{text}</h1>)
+}
 
+const StatisticLine = ({text, value}) => {
+  if (text === "positive"){
+    return (<p>{text} {value} %</p>)
+  }
+  return (
+    <p>{text} {value}</p>
+  )
+}
 
+const Button = ({handleClick, text}) => {
+  return(
+  <button onClick={handleClick}>
+    {text}
+  </button>
+  )
+}
 
 const App = () => {
   const [reviews, setReviews] = useState({
@@ -85,14 +103,11 @@ const App = () => {
 
   return (
     <div>
-        <h1>give feedback</h1>
-        <button onClick={handleGoodClick}>Good</button>
-        <button onClick={handleNeutralClick}>Neutral</button>    
-        <button onClick={handleBadClick}>Bad</button>
-        <DisplayStatistics good={reviews.good} neutral={reviews.neutral} bad={reviews.bad} total={reviews.total} average={statistics.average} positive={statistics.positivePercentage}/>
-
-
-
+        <Headers text="give feedback"/>
+        <Button handleClick={handleGoodClick} text='good'/>
+        <Button handleClick={handleNeutralClick} text='neutral'/>
+        <Button handleClick={handleBadClick} text='bad'/>
+        <Statistics good={reviews.good} neutral={reviews.neutral} bad={reviews.bad} total={reviews.total} average={statistics.average} positive={statistics.positivePercentage}/>
     </div>
   )
 }
