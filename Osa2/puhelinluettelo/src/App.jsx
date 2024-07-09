@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import personService from './services/persons'
-
+import Notification from './components/Notification'
 const Persons = ({persons, newFilter, deletePerson}) => {  
   return(
     <div>
@@ -50,6 +50,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [notification, setNotification] = useState(null)
+
 
   useEffect(() => {
     personService
@@ -71,18 +73,26 @@ const addPerson = (event) =>{
         personService.updateNumber(oldPerson.id, personObject).then
         (returnedPerson => {
           setPersons(persons.map(person => person.id !== oldPerson.id ? person : returnedPerson))
-          setNewName('')
-          setNewNumber('')
         })
+        setNewName('')
+        setNewNumber('')
+        setNotification(`${newName} number changed to ${newNumber}`)
+        setTimeout(()=>{
+          setNotification(null)
+        },3000)
       }
   }
   else {
       personService.create(personObject)
       .then(returnedPerson =>{
       setPersons(persons.concat(returnedPerson))
+      })
       setNewName('')
       setNewNumber('')
-      })
+      setNotification(`Added ${personObject.name}`)
+      setTimeout(()=> {
+        setNotification(null)
+      }, 3000)
     }
   
 }
@@ -91,7 +101,16 @@ const deletePerson = id => {
   .then(deletedPerson => {
     if(window.confirm(`Delete ${deletedPerson.name}?`)){
       setPersons(persons.filter(person => person.id !== deletedPerson.id))
-  }})
+  }      
+  setNotification(`deleted ${deletedPerson.name}`)
+  setTimeout(()=> {
+    setNotification(null)
+  }, 3000)
+
+
+
+
+})
 }
 
   const handlePerson = (event) => {
@@ -109,6 +128,7 @@ const deletePerson = id => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification} />
       <Filter newFilter={newFilter} handleFilter={handleFilter}/>
       <h2>add a new</h2>
       <PersonForm addPerson={addPerson} newName={newName} handlePerson={handlePerson}
