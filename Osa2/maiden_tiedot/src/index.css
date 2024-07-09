@@ -1,0 +1,10 @@
+.countries {
+    display: flex;
+    align-items: center;
+    list-style-type: none;
+    
+  }
+  .countries button{
+    font-size: 12px;
+
+  }  

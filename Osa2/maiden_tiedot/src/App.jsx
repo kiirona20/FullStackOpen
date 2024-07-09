@@ -35,15 +35,17 @@ const App = () => {
     setValue(event.target.value)
     setFilter(allCountries.filter(i=> i.toLowerCase()
       .includes(event.target.value.toLowerCase())))
-    //console.log(filteredCountries)
   }
-//        {JSON.stringify(allCountries, null, 2)}
+
+  const showInstant = (name) => {
+    setFilter([name])
+  }
 
   return (
     <div>
         Find countries: <input value={value} onChange={handleChange} />
         
-        <Filter filteredCountries={filteredCountries} info={info}/>
+        <Filter filteredCountries={filteredCountries} info={info} showInstant={showInstant}/>
     </div>
   )
 }

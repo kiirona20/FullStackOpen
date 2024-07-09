@@ -1,13 +1,21 @@
-const Filter = ({filteredCountries, info}) =>{
-    if (filteredCountries.length > 10 || filteredCountries.length === 0) {
+const Filter = ({filteredCountries, info, showInstant}) =>{
+  
+  console.log(filteredCountries)
+  
+  if (filteredCountries.length > 10 || filteredCountries.length === 0) {
       return(
         <p>Too many matches, specify another filter</p>
       )
     }
-    else if (filteredCountries.length <= 10 && filteredCountries.length > 1){
+  else if (filteredCountries.length <= 10 && filteredCountries.length > 1){
       return(
         <div>
-          {filteredCountries.map(i=> <p key={i}>{i}</p>)}
+          {filteredCountries.map(i=> 
+            <div className="countries" key={i}>
+            <li>{i}</li>
+            <button onClick={()=>showInstant(i)}>show</button>
+            </div>
+        )}
         </div>
       )
     }
