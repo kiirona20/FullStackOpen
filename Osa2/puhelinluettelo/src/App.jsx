@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import personService from './services/persons'
 import Notification from './components/Notification'
+import ErrorNotification from './components/ErrorNotification'
+
 const Persons = ({persons, newFilter, deletePerson}) => {  
   return(
     <div>
@@ -51,6 +53,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
   const [notification, setNotification] = useState(null)
+  const [errorNotification, setErrorNotification] = useState(null)
 
 
   useEffect(() => {
@@ -73,13 +76,20 @@ const addPerson = (event) =>{
         personService.updateNumber(oldPerson.id, personObject).then
         (returnedPerson => {
           setPersons(persons.map(person => person.id !== oldPerson.id ? person : returnedPerson))
+          setNotification(`${newName} number changed to ${newNumber}`)
+          setTimeout(()=>{
+            setNotification(null)
+          },3000)        
+        }).catch(error => {
+          setErrorNotification(`Information of ${newNumber} was already been removed from server`)
+          setTimeout(()=>{
+            setErrorNotification(null)
+          },5000)
+          setPersons(persons.filter(n => n.id !== oldPerson.id))   
         })
         setNewName('')
         setNewNumber('')
-        setNotification(`${newName} number changed to ${newNumber}`)
-        setTimeout(()=>{
-          setNotification(null)
-        },3000)
+
       }
   }
   else {
@@ -92,11 +102,12 @@ const addPerson = (event) =>{
       setNotification(`Added ${personObject.name}`)
       setTimeout(()=> {
         setNotification(null)
-      }, 3000)
+      }, 5000)
     }
   
 }
 const deletePerson = id => {
+  const person = persons.find(n => n.id === id)
   personService.deleteContact(id)
   .then(deletedPerson => {
     if(window.confirm(`Delete ${deletedPerson.name}?`)){
@@ -105,11 +116,13 @@ const deletePerson = id => {
   setNotification(`deleted ${deletedPerson.name}`)
   setTimeout(()=> {
     setNotification(null)
-  }, 3000)
-
-
-
-
+  }, 5000)
+}).catch(error => {
+  setErrorNotification(`Information of ${newNumber} was already been removed from server`)
+  setTimeout(()=>{
+    setErrorNotification(null)
+  },5000) 
+  setPersons(persons.filter(n => n.id !== id))
 })
 }
 
@@ -129,6 +142,7 @@ const deletePerson = id => {
     <div>
       <h2>Phonebook</h2>
       <Notification message={notification} />
+      <ErrorNotification message={errorNotification} />
       <Filter newFilter={newFilter} handleFilter={handleFilter}/>
       <h2>add a new</h2>
       <PersonForm addPerson={addPerson} newName={newName} handlePerson={handlePerson}
