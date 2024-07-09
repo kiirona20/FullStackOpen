@@ -1,20 +1,19 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 import personService from './services/persons'
 
-const Persons = ({persons, newFilter}) => {
+const Persons = ({persons, newFilter, deletePerson}) => {  
   return(
     <div>
     {persons.filter(person => person.name.toLowerCase().includes(newFilter.toLowerCase())).map(person =>
-      <Person key={person.name} person={person}/>
+      <Person key={person.name} person={person} deletePerson={deletePerson}/>
       )}
     </div>  
       )
 }
 
-const Person = ({person}) => {
+const Person = ({person, deletePerson}) => {
   return(
-    <p>{person.name} {person.number}</p>
+    <p>{person.name} {person.number} <button onClick={()=>deletePerson(person.id)}>delete</button></p>
   )
 }
 const Filter = (props) => {
@@ -55,8 +54,8 @@ const App = () => {
   useEffect(() => {
     personService
       .getAll()
-        .then(initialPersons => {
-        setPersons(initialPersons)
+        .then(response => {
+        setPersons(response)
       })
   }, [])
 
@@ -79,6 +78,13 @@ const addPerson = (event) =>{
     }
   
 }
+const deletePerson = id => {
+  personService.deleteContact(id)
+  .then(deletedPerson => {
+    if(window.confirm(`Delete ${deletedPerson.name}?`)){
+      setPersons(persons.filter(person => person.id !== deletedPerson.id))
+  }})
+}
 
   const handlePerson = (event) => {
     setNewName(event.target.value)
@@ -100,7 +106,7 @@ const addPerson = (event) =>{
       <PersonForm addPerson={addPerson} newName={newName} handlePerson={handlePerson}
       newNumber={newNumber} handleNumber={handleNumber}/>
       <h2>Numbers</h2>
-      <Persons persons={persons} newFilter={newFilter}/>
+      <Persons persons={persons} newFilter={newFilter} deletePerson={deletePerson}/>
     </div>
   )
 
