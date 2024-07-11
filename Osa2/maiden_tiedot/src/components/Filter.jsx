@@ -1,6 +1,5 @@
-const Filter = ({filteredCountries, info, showInstant}) =>{
+const Filter = ({filteredCountries, info, showInstant, weather}) =>{
   
-  console.log(filteredCountries)
   
   if (filteredCountries.length > 10 || filteredCountries.length === 0) {
       return(
@@ -21,6 +20,8 @@ const Filter = ({filteredCountries, info, showInstant}) =>{
     }
     else if (filteredCountries.length === 1 && info.name){
     const everyLanguageList = Object.entries(info.languages)
+    const url = `https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`
+    console.log(url)
     
     return(
     <div>
@@ -32,6 +33,12 @@ const Filter = ({filteredCountries, info, showInstant}) =>{
       {everyLanguageList.map(i=>
         <li key={i}>{i[1]}</li>
       )}
+      <h2>Weather in {weather.name}</h2>
+
+      <p>temperature {weather.main.temp} Celsius</p>
+
+      <img src={url}></img>
+      <p>Wind {weather.wind.speed} m/s</p>
     </div>
     )
     }
