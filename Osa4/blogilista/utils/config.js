@@ -1,7 +1,7 @@
 require('dotenv').config()
 
-const MONGO_URI = process.env.MONGO_URI
+const MONGODB_URI = process.env.MONGODB_URI
 
 module.exports = {
-    MONGO_URI
+    MONGODB_URI
 }

@@ -4,8 +4,7 @@ content-type: application/json
 {
   "title": "some3TItle",
   "author": "some3Author",
-  "url": "idk3",
-  "likes": "3"
-}
+  "url": "idk3"
+  }
 ###
 GET http://localhost:3003/api/blogs
