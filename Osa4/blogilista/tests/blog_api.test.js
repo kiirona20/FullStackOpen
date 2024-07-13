@@ -91,6 +91,36 @@ test('if blog doesn`t have property likes, likes equal 0', async () => {
   
 })
 
+
+test('if blog doesn`t have url or title, status is "400 bad request"', async () => {
+  const newBlog = {
+    url: 'www.w.fi'
+  }
+  const newBlog2 = {
+    title: 'jotain'
+  }
+  const newBlog3 = {
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog2)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog3)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+  
+})
 after(async () => {
   await mongoose.connection.close()
 })
