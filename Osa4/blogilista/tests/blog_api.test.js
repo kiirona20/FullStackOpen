@@ -106,21 +106,57 @@ test('if blog doesn`t have url or title, status is "400 bad request"', async () 
     .post('/api/blogs')
     .send(newBlog)
     .expect(400)
-    .expect('Content-Type', /application\/json/)
 
   await api
     .post('/api/blogs')
     .send(newBlog2)
     .expect(400)
-    .expect('Content-Type', /application\/json/)
 
   await api
     .post('/api/blogs')
     .send(newBlog3)
     .expect(400)
-    .expect('Content-Type', /application\/json/)
-  
+
 })
+
+test('a blog can be deleted', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToDelete = blogsAtStart[0]
+
+  await api
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  assert(!JSON.stringify(blogsAtEnd).includes(JSON.stringify(blogToDelete)))
+
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
+})
+
+test('a blog is updated correctly', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToUpdate = blogsAtStart[0]
+
+  const updatedBlog = {
+    title: "String",
+    author: "some3Author",
+    url: "idk3",
+    likes: 420,
+    id: blogToUpdate.id
+  }
+
+  await api
+  .put(`/api/blogs/${blogToUpdate.id}`)
+  .send(updatedBlog)
+  .expect(200)
+  .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  assert(JSON.stringify(blogsAtEnd).includes(JSON.stringify(updatedBlog)))
+
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })

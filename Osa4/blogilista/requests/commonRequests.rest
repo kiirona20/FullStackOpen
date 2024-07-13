@@ -2,8 +2,23 @@ POST http://localhost:3003/api/blogs
 content-type: application/json
 
 {
+  "title": "String",
   "author": "some3Author",
-  "url": "idk3"
+  "url": "idk3",
+  "likes": "420"
   }
 ###
 GET http://localhost:3003/api/blogs
+
+###Delete blog
+Delete  http://localhost:3003/api/blogs/66926e892bef0c41b12eaca5
+###Update blog
+PUT  http://localhost:3003/api/blogs/5a422bc61b54a676234d17fc
+content-type: application/json
+
+{
+  "title": "Type wars",
+  "author": "Robert C. Martin",
+  "url": "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
+  "likes": "69"
+  }
