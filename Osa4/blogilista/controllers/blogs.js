@@ -6,7 +6,6 @@ const { userExtractor } = require('../utils/middleware')
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 });
-  console.log(blogs)
   response.json(blogs);
 });
   
@@ -38,8 +37,7 @@ blogsRouter.delete('/:id', userExtractor, async (request,response)=> {
 
   const user = request.user
   const blog = await Blog.findById(request.params.id)
-  console.log(blog)
-  console.log(user)
+
   if (blog.user.toString() === user.id.toString()){
     await Blog.findByIdAndDelete(request.params.id)
     response.status(204).end()
