@@ -1,17 +1,24 @@
 POST http://localhost:3003/api/blogs
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RpIiwiaWQiOiI2Njk0MjdiNTkyZDFmYTliZWJlNzdhODIiLCJpYXQiOjE3MjA5ODc4NTksImV4cCI6MTcyMDk5MTQ1OX0.lNIJ6jU7GmraFpyxWDSqkSg1aIZTWKuvYgKIJmiTAYI
 
 {
-  "title": "String",
-  "author": "some3Author",
-  "url": "idk3",
-  "likes": "420"
+  "title": "test1qw",
+  "author": "test1qw",
+  "url": "test1wq",
+  "likes": "3211a"
+  
   }
 ###
 GET http://localhost:3003/api/blogs
 
+###
+GET http://localhost:3003/api/users
+
 ###Delete blog
-Delete  http://localhost:3003/api/blogs/66926e892bef0c41b12eaca5
+Delete  http://localhost:3003/api/blogs/6694280492d1fa9bebe77a88
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RpMSIsImlkIjoiNjY5NDIwOTVkOTQwYWQ5ZWMzZWJiYWQ1IiwiaWF0IjoxNzIwOTg4MzI5LCJleHAiOjE3MjA5OTE5Mjl9.o3USkKTASic3SM-c5ms82ZtH4FsgEHni5IR2Jp8b6z8
+
 ###Update blog
 PUT  http://localhost:3003/api/blogs/5a422bc61b54a676234d17fc
 content-type: application/json
@@ -22,3 +29,42 @@ content-type: application/json
   "url": "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
   "likes": "69"
   }
+###
+POST http://localhost:3003/api/users
+content-type: application/json
+
+{
+  "username": "testi1",
+  "name": "testi1",
+  "password": "lol1"
+}
+###
+POST http://localhost:3003/api/users
+content-type: application/json
+
+{
+  "username": "testi",
+  "name": "testi",
+  "password": "lol"
+}
+###
+http://localhost:3003/api/users
+
+###
+POST http://localhost:3003/api/login
+content-type: application/json
+
+{
+  "username": "testi",
+  "password": "lol"
+
+}
+###
+POST http://localhost:3003/api/login
+content-type: application/json
+
+{
+  "username": "testi1",
+  "password": "lol1"
+}
+
