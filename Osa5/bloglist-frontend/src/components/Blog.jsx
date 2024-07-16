@@ -30,13 +30,13 @@ const Blog = ({ blog, addLike, deleteBlog, loggedInUser }) => {
 
   return(
     <div style={blogStyle}>
-      <div style={hideWhenVisible}>
+      <div style={hideWhenVisible} className='partialView'>
         {blog.title} {blog.author}
         <button onClick={toggleVisibility}>view</button>
       </div>
-      <div style={showWhenVisible}>
+      <div style={showWhenVisible} className='fullView'>
         <div>
-          <p>{blog.title}<button onClick={toggleVisibility}>hide</button></p>
+          <p>{blog.title} {blog.author}<button onClick={toggleVisibility}>hide</button></p>
           <p>{blog.url}</p>
           <p>{blog.likes}<button onClick={addLike}>like</button></p>
           <p>{blog.user.name}</p>
