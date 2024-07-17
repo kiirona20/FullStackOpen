@@ -38,7 +38,7 @@ const Blog = ({ blog, addLike, deleteBlog, loggedInUser }) => {
         <div>
           <p>{blog.title} {blog.author}<button onClick={toggleVisibility}>hide</button></p>
           <p>{blog.url}</p>
-          <p className='like'>{blog.likes}<button onClick={addLike}>like</button></p>
+          <p>{blog.likes}<button onClick={addLike}>like</button></p>
           <p>{blog.user.name}</p>
           <button onClick={deleteBlog} style={hideWhenVisibleBUtton}>REMOVE {'>'}:D</button>
 

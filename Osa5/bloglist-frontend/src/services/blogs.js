@@ -5,7 +5,8 @@ let token = null
 
 const setToken = newToken => {
   token = `Bearer ${newToken}`
-  console.log(token)
+  console.log("first Token? :", token)
+
 }
 
 const getAll = () => {
@@ -14,7 +15,6 @@ const getAll = () => {
 }
 
 const create = async newObject => {
-  console.log(token)
   const config = {
     headers: {authorization: token },
   }
@@ -32,10 +32,10 @@ const update = async (id, newObject) => {
 
 const deleteBlog = async (id) => {
   const config = {
-    headers: { Authorization: token },
+    headers: {authorization: token },
   }
+  console.log("Second token: ", token)
   const response = await axios.delete(`${baseUrl}/${id}`,config)
-  console.log(response)
   return response.data
 }
 

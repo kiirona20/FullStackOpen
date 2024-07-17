@@ -21,7 +21,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs.sort((a,b) => a.likes-b.likes) )
+      setBlogs( blogs.sort((a,b) => b.likes-a.likes) )
     )
   }, [])
 
@@ -84,7 +84,7 @@ const App = () => {
     const changedBlog = { ...blog, likes: blog.likes + 1 }
     try{
       await blogService.update(id, changedBlog)
-      setBlogs(blogs.map(blog => blog.id !== id ? blog : changedBlog).sort((a,b) => a.likes-b.likes))
+      setBlogs(blogs.map(blog => blog.id !== id ? blog : changedBlog).sort((a,b) => b.likes-a.likes))
     } catch {
       console.log(`Blog ${blog.title} was already removed`)
     }
@@ -93,13 +93,20 @@ const App = () => {
   const deleteBlog = async (id) => {
     const blog = blogs.find(n => n.id === id)
     if (window.confirm(`Remove ${blog.title} by ${blog.author}`)){
+      try{
+      console.log("This is the blog that needs to be delete: ", blog)
       await blogService.deleteBlog(id)
       setBlogs(blogs.filter((i) => i.id !== id))
       setNotificationMessage(`blog ${blog.title} has been deleted :D`)
       setTimeout(() => {
         setNotificationMessage(null)
       }, 5000)
-
+    } catch{
+      setNotificationMessage('Failed to delete event :(')
+      setTimeout(() => {
+        setNotificationMessage(null)
+      }, 5000)
+    }
     }
 
   }
