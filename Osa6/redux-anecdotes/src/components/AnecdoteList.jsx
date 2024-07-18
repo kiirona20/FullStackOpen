@@ -3,9 +3,10 @@ import { addVote } from '../reducers/anecdoteReducer'
 
 
 const anecdoteList = () => {
-    const anecdotes = useSelector(state => state.sort((a,b)=> b.votes-a.votes))
+    const anecdotes = useSelector(state => state.content
+    .filter(i=>i.content.includes(state.filter))
+    .sort((a,b)=> b.votes-a.votes))
     const dispatch = useDispatch()
-  
     const vote = (id) => {
       dispatch(addVote(id))
     }
