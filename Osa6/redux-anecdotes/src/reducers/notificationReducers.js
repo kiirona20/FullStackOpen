@@ -23,7 +23,7 @@ const notificationSlice = createSlice({
                 if (text === null){
                     return {payload: null}
                 }
-                return {payload: `you created '${text}'`}
+                return {payload: `you created '${text.content}'`}
             }
         }
     }
