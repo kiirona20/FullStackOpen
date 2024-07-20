@@ -1,17 +1,19 @@
 import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
-import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Togglable from './components/Togglable'
+import { useContext } from 'react'
 
+import NotificationContext from './createContext'
+import Notification from './components/Notification'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [notificationMessage, setNotificationMessage] = useState(null)
+  const [notification, dispatch] = useContext(NotificationContext)
 
   const blogFormRef = useRef()
 
@@ -44,9 +46,9 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setNotificationMessage('wrong username or password')
+      dispatch({ type: 'ERROR', payload: 'wrong password or username' })
       setTimeout(() => {
-        setNotificationMessage(null)
+        dispatch({ type: 'NULL' })
       }, 5000)
     }
   }
@@ -55,19 +57,16 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
     try {
       const returnedBlog = await blogService.create(blogObject)
-      //iffy implementation :D
       const addedBlog = { ...returnedBlog, user: user }
       setBlogs(blogs.concat(addedBlog))
-      setNotificationMessage(
-        `a new blog ${blogObject.title} by ${blogObject.author} added`
-      )
+      dispatch({ type: 'CREATE', payload: addedBlog })
       setTimeout(() => {
-        setNotificationMessage(null)
+        dispatch({ type: 'NULL' })
       }, 5000)
     } catch {
-      setNotificationMessage('failed to add blog')
+      dispatch({ type: 'ERROR', payload: 'failed to add blog' })
       setTimeout(() => {
-        setNotificationMessage(null)
+        dispatch({ type: 'NULL' })
       }, 5000)
     }
   }
@@ -93,14 +92,14 @@ const App = () => {
         console.log('This is the blog that needs to be delete: ', blog)
         await blogService.deleteBlog(id)
         setBlogs(blogs.filter((i) => i.id !== id))
-        setNotificationMessage(`blog ${blog.title} has been deleted :D`)
+        dispatch({ type: 'DELETE', payload: blog })
         setTimeout(() => {
-          setNotificationMessage(null)
+          dispatch({ type: 'NULL' })
         }, 5000)
       } catch {
-        setNotificationMessage('Failed to delete event :(')
+        dispatch({ type: 'ERROR', payload: 'failed to delete blog' })
         setTimeout(() => {
-          setNotificationMessage(null)
+          dispatch({ type: 'NULL' })
         }, 5000)
       }
     }
@@ -115,7 +114,7 @@ const App = () => {
     return (
       <div>
         <h2>Log in to application</h2>
-        <Notification message={notificationMessage} />
+        <Notification />
 
         <form onSubmit={handleLogin}>
           <div>
@@ -146,7 +145,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <Notification message={notificationMessage} />
+      <Notification />
 
       <p>
         {user.name} logged in <button onClick={handleLogout}>logout</button>
