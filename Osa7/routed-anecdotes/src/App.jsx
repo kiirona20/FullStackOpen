@@ -3,6 +3,8 @@ import {
   BrowserRouter as Router,
   Routes, Route, Link, useParams, useNavigate
 } from 'react-router-dom'
+import { useField } from './hooks'
+
 
 const Menu = ({anecdotes, addNew, notification, setNotification}) => {
   const padding = {
@@ -67,25 +69,32 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
-  const navigate = useNavigate()
+  const navigate = useNavigate('')
+  const {reset: resetContent, ...content} = useField('')
+  const {reset: resetAuthor, ...author} = useField('')
+  const {reset: resetInfo, ...info} = useField('')
+
 
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    console.log(content)
     props.addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0
     })
-    props.setNotification(`a new anecdote ${content} created!`)
+    props.setNotification(`a new anecdote ${content.value} created!`)
     setTimeout(()=> {
       props.setNotification('')
     }, 5000)
     navigate('/')
+  }
+  const handleReset = () => {
+    resetContent()
+    resetAuthor()
+    resetInfo()
   }
 
   return (
@@ -94,18 +103,17 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input {...content} />
         </div>
         <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
-        </div>
+          <input {...author} />        
+          </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+          <input {...info} /> 
         </div>
-        <button>create</button>
-      </form>
+        <button type='submit'>create</button><button type='reset' onClick={handleReset} >reset</button></form>
     </div>
   )
 
